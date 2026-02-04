@@ -12,9 +12,9 @@ const Carousel = ({ imageUrls, title }) => {
   };
 
   const handlePrevious = () => {
-    const previousIndex =
-      (currentIndex - 1 + imageUrls.length) % imageUrls.length;
-    setCurrentIndex(previousIndex);
+    setCurrentIndex(
+      prevIndex => (prevIndex - 1 + imageUrls.length) % imageUrls.length
+    );
   };
 
   return (
