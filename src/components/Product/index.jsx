@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 
-import { Spinner, Typography } from "@bigbinary/neetoui";
+import { Typography } from "@bigbinary/neetoui";
 import productApi from "apis/products";
 import { append, isNotNil } from "ramda";
+import { useParams } from "react-router-dom";
 
 import Carousel from "./Carousel";
 
+import { Header, PageLoader } from "../commons";
+
 const Product = () => {
+  const { slug } = useParams();
+
   const [product, setProduct] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchProduct = async () => {
     try {
-      const product = await productApi.show();
+      const product = await productApi.show(slug);
       setProduct(product);
     } catch (error) {
       console.log("Error fetching product data:", error);
@@ -23,28 +28,17 @@ const Product = () => {
 
   useEffect(() => {
     fetchProduct();
-  }, []);
+  }, [slug]);
 
   const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
   const totalDiscount = mrp - offerPrice;
   const discountPercentage = ((totalDiscount / mrp) * 100).toFixed(2);
 
-  if (isLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="px-6 pb-6">
-      <div>
-        <Typography className="py-2 text-4xl font-semibold" style="h1">
-          {name}
-        </Typography>
-        <hr className="border-2 border-black" />
-      </div>
+      <Header title={name} />
       <div className="mt-16 flex gap-4 ">
         <div className="w-2/5">
           <div className="flex justify-center gap-16">
