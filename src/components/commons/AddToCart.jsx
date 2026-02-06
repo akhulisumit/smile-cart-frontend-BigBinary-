@@ -1,21 +1,13 @@
-import { useContext } from "react";
-
 import { Button } from "neetoui";
-import { without } from "ramda";
-
-import CartItemsContext from "../../contexts/CartItemsContext";
+import useCartItemsStore from "stores/useCartItemsStore";
 
 const AddToCart = ({ slug }) => {
-  const [cartItems, setCartItems] = useContext(CartItemsContext);
+  const { cartItems, toggleCartItem } = useCartItemsStore();
 
   const handleClick = e => {
     e.stopPropagation();
     e.preventDefault();
-    setCartItems(prevCartItems =>
-      prevCartItems.includes(slug)
-        ? without([slug], prevCartItems)
-        : [slug, ...prevCartItems]
-    );
+    toggleCartItem(slug);
   };
 
   return (

@@ -1,18 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Typography } from "@bigbinary/neetoui";
 import productApi from "apis/products";
 import { append, isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
+import useCartItemsStore from "stores/useCartItemsStore";
 
 import Carousel from "./Carousel";
 
-import CartItemsContext from "../../contexts/CartItemsContext";
 import { AddToCart, Header, PageLoader } from "../commons";
 
 const Product = () => {
   const { slug } = useParams();
-  const [cartItems] = useContext(CartItemsContext);
+  const cartItems = useCartItemsStore(store => store.cartItems);
 
   const [product, setProduct] = useState({});
   const [isLoading, setIsLoading] = useState(true);

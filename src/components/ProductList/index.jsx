@@ -1,19 +1,19 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import productApi from "apis/products";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
 import { isEmpty } from "ramda";
+import useCartItemsStore from "stores/useCartItemsStore";
 
 import ProductListItem from "./ProductListItem";
 
-import CartItemsContext from "../../contexts/CartItemsContext";
 import useDebounce from "../../hooks/useDebounce";
 import { Header, PageLoader, PageNotFound } from "../commons";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
-  const [cartItems] = useContext(CartItemsContext);
+  const cartItems = useCartItemsStore(store => store.cartItems);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [searchKey, setSearchKey] = useState("");
