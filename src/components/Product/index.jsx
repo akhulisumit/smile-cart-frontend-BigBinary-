@@ -32,7 +32,15 @@ const Product = () => {
     fetchProduct();
   }, [slug]);
 
-  const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
+  const {
+    name,
+    description,
+    mrp,
+    offerPrice,
+    imageUrls,
+    imageUrl,
+    availableQuantity,
+  } = product;
   const totalDiscount = mrp - offerPrice;
   const discountPercentage = ((totalDiscount / mrp) * 100).toFixed(2);
 
@@ -61,7 +69,7 @@ const Product = () => {
             {discountPercentage}% off
           </Typography>
           <div className="flex space-x-10">
-            <AddToCart {...{ slug }} />
+            <AddToCart {...{ availableQuantity, slug }} />
           </div>
         </div>
       </div>

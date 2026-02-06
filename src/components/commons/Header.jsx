@@ -1,15 +1,15 @@
 import { Typography } from "@bigbinary/neetoui";
 import { LeftArrow } from "neetoicons";
+import { keys } from "ramda";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
+import userCartItemsStore from "stores/useCartItemsStore";
 
-const Header = ({
-  title,
-  shouldShowBackButton = true,
-  actionBlock,
-  cartItemsCount,
-}) => {
+const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   const history = useHistory();
+  const cartItemsCount = userCartItemsStore(
+    store => keys(store.cartItems).length
+  );
 
   return (
     <div className="m-2">
