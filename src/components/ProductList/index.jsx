@@ -7,6 +7,7 @@ import { isEmpty } from "ramda";
 
 import ProductListItem from "./ProductListItem";
 
+import useDebounce from "../../hooks/useDebounce";
 import { Header, PageLoader, PageNotFound } from "../commons";
 
 const ProductsList = () => {
@@ -14,10 +15,13 @@ const ProductsList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [searchKey, setSearchKey] = useState("");
+  const debouncedSearchKey = useDebounce(searchKey);
 
   const fetchProducts = async () => {
     try {
-      const response = await productApi.fetch({ searchTerm: searchKey });
+      const response = await productApi.fetch({
+        searchTerm: debouncedSearchKey,
+      });
       // console.log(response);
       setProducts(response.products);
     } catch {
@@ -29,7 +33,7 @@ const ProductsList = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [searchKey]);
+  }, [debouncedSearchKey]);
 
   if (isError) return <PageNotFound />;
 
