@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Typography } from "@bigbinary/neetoui";
 import productApi from "apis/products";
@@ -7,10 +7,12 @@ import { useParams } from "react-router-dom";
 
 import Carousel from "./Carousel";
 
-import { Header, PageLoader } from "../commons";
+import CartItemsContext from "../../contexts/CartItemsContext";
+import { AddToCart, Header, PageLoader } from "../commons";
 
 const Product = () => {
   const { slug } = useParams();
+  const [cartItems] = useContext(CartItemsContext);
 
   const [product, setProduct] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +40,7 @@ const Product = () => {
 
   return (
     <div className="px-6 pb-6">
-      <Header title={name} />
+      <Header cartItemsCount={cartItems.length} title={name} />
       <div className="mt-16 flex gap-4 ">
         <div className="w-2/5">
           <div className="flex justify-center gap-16">
@@ -58,6 +60,9 @@ const Product = () => {
           <Typography className="font-semibold text-green-600">
             {discountPercentage}% off
           </Typography>
+          <div className="flex space-x-10">
+            <AddToCart {...{ slug }} />
+          </div>
         </div>
       </div>
     </div>

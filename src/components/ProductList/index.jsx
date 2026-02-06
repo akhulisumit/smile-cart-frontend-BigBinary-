@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import productApi from "apis/products";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
-import { isEmpty, without } from "ramda";
+import { isEmpty } from "ramda";
 
 import ProductListItem from "./ProductListItem";
 
+import CartItemsContext from "../../contexts/CartItemsContext";
 import useDebounce from "../../hooks/useDebounce";
 import { Header, PageLoader, PageNotFound } from "../commons";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
+  const [cartItems] = useContext(CartItemsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [searchKey, setSearchKey] = useState("");
-  const [cartItems, setCartItems] = useState([]);
   const debouncedSearchKey = useDebounce(searchKey);
 
   const fetchProducts = async () => {
@@ -35,13 +36,6 @@ const ProductsList = () => {
   useEffect(() => {
     fetchProducts();
   }, [debouncedSearchKey]);
-
-  const toggleIsInCart = slug =>
-    setCartItems(prevCartItmes =>
-      prevCartItmes.includes(slug)
-        ? without([slug], cartItems)
-        : [slug, ...cartItems]
-    );
 
   if (isError) return <PageNotFound />;
 
@@ -68,12 +62,7 @@ const ProductsList = () => {
       ) : (
         <div className="grid grid-cols-2 justify-items-center gap-y-8 p-4 md:grid-cols-3 lg:grid-cols-4">
           {products.map(product => (
-            <ProductListItem
-              key={product.slug}
-              {...product}
-              isInCart={cartItems.includes(product.slug)}
-              toggleIsInCart={() => toggleIsInCart(product.slug)}
-            />
+            <ProductListItem key={product.slug} {...product} />
           ))}
         </div>
       )}
