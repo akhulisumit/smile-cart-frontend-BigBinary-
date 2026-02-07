@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 
 import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import useFuncDebounce from "hooks/useFuncDebounce";
@@ -98,4 +98,4 @@ const ProductsList = () => {
   );
 };
 
-export default withTitle(ProductsList, i18n.t("productList.title"));
+export default withTitle(memo(ProductsList), i18n.t("productList.title"));

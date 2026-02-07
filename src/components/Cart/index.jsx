@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import Header from "components/commons/Header";
 import NoData from "components/commons/NoData";
 import PageLoader from "components/commons/PageLoader";
@@ -52,4 +54,4 @@ const Cart = () => {
   );
 };
 
-export default withTitle(Cart, i18n.t("cart.title"));
+export default withTitle(memo(Cart), i18n.t("cart.title"));

@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import { Typography, Button } from "@bigbinary/neetoui";
 import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import useSelectedQuantity from "hooks/useSelectedQuantity";
@@ -63,4 +65,4 @@ const Product = () => {
   );
 };
 
-export default withTitle(Product, i18n.t("product.title"));
+export default withTitle(memo(Product), i18n.t("product.title"));

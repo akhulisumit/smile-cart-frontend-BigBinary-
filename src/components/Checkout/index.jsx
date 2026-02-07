@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, memo } from "react";
 
 import { PageLoader } from "components/commons";
 import {
@@ -129,4 +129,4 @@ const Checkout = () => {
   );
 };
 
-export default withTitle(Checkout, i18n.t("checkout"));
+export default withTitle(memo(Checkout), i18n.t("checkout"));
