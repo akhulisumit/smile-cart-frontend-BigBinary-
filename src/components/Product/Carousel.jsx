@@ -19,6 +19,10 @@ const Carousel = () => {
 
   const imageUrls = append(imageUrl, partialImageUrls);
 
+  const handleNext = useCallback(() => {
+    setCurrentIndex(prevIndex => (prevIndex + 1) % imageUrls.length);
+  }, [imageUrls.length]);
+
   const resetTimer = () => {
     clearInterval(timerRef.current);
     timerRef.current = setInterval(handleNext, 3000);
@@ -29,10 +33,6 @@ const Carousel = () => {
 
     return () => clearInterval(timerRef.current);
   }, [handleNext]);
-
-  const handleNext = useCallback(() => {
-    setCurrentIndex(prevIndex => (prevIndex + 1) % imageUrls.length);
-  }, [imageUrls.length]);
 
   const handlePrevious = () => {
     setCurrentIndex(
