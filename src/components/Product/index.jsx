@@ -53,7 +53,7 @@ const Product = () => {
               className="bg-neutral-800 hover:bg-neutral-950"
               label="Buy Now"
               size="large"
-              to={routes.checkout}
+              to={routes.products.checkout}
               onClick={() => setSelectedQuantity(selectedQuantity || 1)}
             />
           </div>
