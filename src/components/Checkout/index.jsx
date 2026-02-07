@@ -30,7 +30,7 @@ const Checkout = () => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const { mutate: createOrder } = useCreateOrder();
 
-  const { cartItems, clearCart } = useCartItemsStore.pick();
+  const { cartItems, clearCartItems } = useCartItemsStore.pick();
 
   const { t } = useTranslation();
 
@@ -70,14 +70,14 @@ const Checkout = () => {
   const redirectToHome = () => {
     timerRef.current = setTimeout(() => {
       history.push(routes.root);
-      clearCart();
+      clearCartItems();
     }, 1500);
   };
 
   const handleRedirect = () => {
     if (timerRef.current) {
       history.push(routes.root);
-      clearCart();
+      clearCartItems();
       clearTimeout(timerRef.current);
     } else {
       history.goBack();
@@ -92,7 +92,7 @@ const Checkout = () => {
       formikProps={{
         initialValues: checkoutFormData || CHECKOUT_FORM_INITIAL_VALUES,
         validationSchema: CHECKOUT_FORM_VALIDATION_SCHEMA,
-        onsubmit: handleSubmit,
+        onSubmit: handleSubmit,
       }}
     >
       <div className="flex space-x-4">
