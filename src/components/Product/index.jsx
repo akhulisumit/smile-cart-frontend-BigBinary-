@@ -7,9 +7,11 @@ import { append, isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 import routes from "routes";
 import useCartItemsStore from "stores/useCartItemsStore";
+import withTitle from "utils/withTitle";
 
 import Carousel from "./Carousel";
 
+import i18n from "../../common/i18n";
 import { AddToCart, Header, PageLoader } from "../commons";
 
 const Product = () => {
@@ -87,4 +89,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default withTitle(Product, i18n.t("product.title"));

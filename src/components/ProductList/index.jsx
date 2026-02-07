@@ -5,9 +5,11 @@ import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
 import { isEmpty } from "ramda";
 import useCartItemsStore from "stores/useCartItemsStore";
+import withTitle from "utils/withTitle";
 
 import ProductListItem from "./ProductListItem";
 
+import i18n from "../../common/i18n";
 import useDebounce from "../../hooks/useDebounce";
 import { Header, PageLoader, PageNotFound } from "../commons";
 
@@ -70,4 +72,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default withTitle(ProductsList, i18n.t("productList.title"));
