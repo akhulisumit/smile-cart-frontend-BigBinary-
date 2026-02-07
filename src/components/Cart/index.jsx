@@ -10,14 +10,14 @@ import { keys, isEmpty } from "ramda";
 import useCartItemsStore from "stores/useCartItemsStore";
 
 import PriceCard from "./PriceCard";
-import ProductCard from "./ProductCart";
+import ProductCard from "./ProductCard";
 
 import { OFFER_PRICE, MRP } from "../constants";
 
 const Cart = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { cartItems, setSelectedQuantity } = useCartItemsStore();
+  const { cartItems, setSelectedQuantity } = useCartItemsStore.pick();
 
   const totalOfferPrice = cartTotalOf(products, OFFER_PRICE);
   const totalMrp = cartTotalOf(products, MRP);
