@@ -3,10 +3,11 @@ import React from "react";
 // eslint-disable-next-line import/order
 import "./common/i18n";
 //i18n should load before App initialization. Hence, disabling import/order rule.
-
 import ReactDOM from "react-dom/client";
+import { QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import queryClient from "utils/queryClient";
 
 import initializeAxios from "./apis/axios";
 import App from "./App";
@@ -17,10 +18,12 @@ initializeAxios();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ToastContainer />
-      <App />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ToastContainer />
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
