@@ -2,11 +2,12 @@ import { useState } from "react";
 
 import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import { Search } from "neetoicons";
-import { Input, NoData } from "neetoui";
+import { Input, NoData, Pagination } from "neetoui";
 import { isEmpty } from "ramda";
 import useCartItemsStore from "stores/useCartItemsStore";
 import withTitle from "utils/withTitle";
 
+import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "./constants";
 import ProductListItem from "./ProductListItem";
 
 import i18n from "../../common/i18n";
@@ -14,16 +15,21 @@ import useDebounce from "../../hooks/useDebounce";
 import { Header, PageLoader, PageNotFound } from "../commons";
 
 const ProductsList = () => {
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_INDEX);
   const [searchKey, setSearchKey] = useState("");
   const debouncedSearchKey = useDebounce(searchKey);
 
+  const productParams = {
+    searchTerm: debouncedSearchKey,
+    page: currentPage,
+    pageSize: DEFAULT_PAGE_SIZE,
+  };
+
   const {
-    data: { products = [] } = {},
+    data: { products = [], totalProductsCount } = {},
     isLoading,
     isError,
-  } = useFetchProducts({
-    searchTerm: debouncedSearchKey,
-  });
+  } = useFetchProducts(productParams);
   const cartItems = useCartItemsStore(store => store.cartItems);
   if (isError) return <PageNotFound />;
 
@@ -41,7 +47,10 @@ const ProductsList = () => {
             prefix={<Search />}
             type="search"
             value={searchKey}
-            onChange={event => setSearchKey(event.target.value)}
+            onChange={event => {
+              setSearchKey(event.target.value);
+              setCurrentPage(DEFAULT_PAGE_INDEX);
+            }}
           />
         }
       />
@@ -54,6 +63,14 @@ const ProductsList = () => {
           ))}
         </div>
       )}
+      <div className="mb-5 self-end">
+        <Pagination
+          count={totalProductsCount}
+          navigate={page => setCurrentPage(page)}
+          pageNo={currentPage || DEFAULT_PAGE_INDEX}
+          pageSize={DEFAULT_PAGE_SIZE}
+        />
+      </div>
     </div>
   );
 };
