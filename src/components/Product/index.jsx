@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
-
 import { Typography, Button } from "@bigbinary/neetoui";
-import productApi from "apis/products";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import useSelectedQuantity from "hooks/useSelectedQuantity";
-import { append, isNotNil } from "ramda";
+import { isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 import routes from "routes";
 import useCartItemsStore from "stores/useCartItemsStore";
@@ -12,44 +10,20 @@ import withTitle from "utils/withTitle";
 import Carousel from "./Carousel";
 
 import i18n from "../../common/i18n";
-import { AddToCart, Header, PageLoader } from "../commons";
+import { AddToCart, Header, PageLoader, PageNotFound } from "../commons";
 
 const Product = () => {
   const { slug } = useParams();
+  const { data: product, isLoading, isError } = useShowProduct(slug);
   const cartItems = useCartItemsStore(store => store.cartItems);
   const [selectedQuantity, setSelectedQuantity] = useSelectedQuantity(slug);
-
-  const [product, setProduct] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchProduct = async () => {
-    try {
-      const product = await productApi.show(slug);
-      setProduct(product);
-    } catch (error) {
-      console.log("Error fetching product data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProduct();
-  }, [slug]);
-
-  const {
-    name,
-    description,
-    mrp,
-    offerPrice,
-    imageUrls,
-    imageUrl,
-    availableQuantity,
-  } = product;
-  const totalDiscount = mrp - offerPrice;
-  const discountPercentage = ((totalDiscount / mrp) * 100).toFixed(2);
+  if (isError) return <PageNotFound />;
 
   if (isLoading) return <PageLoader />;
+
+  const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
+  const totalDiscount = mrp - offerPrice;
+  const discountPercentage = ((totalDiscount / mrp) * 100).toFixed(2);
 
   return (
     <div className="px-6 pb-6">
@@ -58,7 +32,7 @@ const Product = () => {
         <div className="w-2/5">
           <div className="flex justify-center gap-16">
             {isNotNil(imageUrls) ? (
-              <Carousel imageUrls={append(imageUrl, imageUrls)} title={name} />
+              <Carousel />
             ) : (
               <img alt={name} className="w-48" src={imageUrl} />
             )}
@@ -74,7 +48,7 @@ const Product = () => {
             {discountPercentage}% off
           </Typography>
           <div className="flex space-x-10">
-            <AddToCart {...{ availableQuantity, slug }} />
+            <AddToCart slug={slug} />
             <Button
               className="bg-neutral-800 hover:bg-neutral-950"
               label="Buy Now"

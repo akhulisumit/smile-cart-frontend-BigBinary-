@@ -1,18 +1,13 @@
 import { useState } from "react";
 
 import ProductQuantity from "components/commons/ProductQuantity";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import { Delete } from "neetoicons";
 import { Typography, Alert } from "neetoui";
 import useCartItemsStore from "stores/useCartItemsStore";
 
-const ProductCard = ({
-  slug,
-  imageUrl,
-  offerPrice,
-  mrp,
-  name,
-  availableQuantity,
-}) => {
+const ProductCard = ({ slug, imageUrl, offerPrice, mrp, name }) => {
+  const { data: { availableQuantity } = {} } = useShowProduct(slug);
   const removeCartItem = useCartItemsStore.pickFrom();
   const [shouldShowDeleteAlert, setShouldShowDeleteAlert] = useState(false);
 

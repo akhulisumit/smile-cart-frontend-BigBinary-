@@ -1,10 +1,12 @@
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import useSelectedQuantity from "hooks/useSelectedQuantity";
 import { Button } from "neetoui";
 import { isNil } from "ramda";
 
 import ProductQuantity from "./ProductQuantity";
 
-const AddToCart = ({ slug, availableQuantity }) => {
+const AddToCart = ({ slug }) => {
+  const { data: { availableQuantity } = {} } = useShowProduct(slug);
   const [selectedQuantity, setSelectedQuantity] = useSelectedQuantity(slug);
 
   const handleClick = e => {

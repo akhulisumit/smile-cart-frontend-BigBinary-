@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import productApi from "apis/products";
+import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
 import { isEmpty } from "ramda";
@@ -14,31 +14,17 @@ import useDebounce from "../../hooks/useDebounce";
 import { Header, PageLoader, PageNotFound } from "../commons";
 
 const ProductsList = () => {
-  const [products, setProducts] = useState([]);
-  const cartItems = useCartItemsStore(store => store.cartItems);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const debouncedSearchKey = useDebounce(searchKey);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await productApi.fetch({
-        searchTerm: debouncedSearchKey,
-      });
-      // console.log(response);
-      setProducts(response.products);
-    } catch {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [debouncedSearchKey]);
-
+  const {
+    data: { products = [] } = {},
+    isLoading,
+    isError,
+  } = useFetchProducts({
+    searchTerm: debouncedSearchKey,
+  });
+  const cartItems = useCartItemsStore(store => store.cartItems);
   if (isError) return <PageNotFound />;
 
   if (isLoading) return <PageLoader />;
